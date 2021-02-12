@@ -30,12 +30,13 @@ func loadPage(title string) (*Page, error) {
 
 func main() {
 	log.SetPrefix("goweb: ")
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile | log.Lmsgprefix)
 
 	http.HandleFunc("/ding", handleDing)
 	http.HandleFunc("/post2ding", handlePost2Ding)
 
 	log.Printf("serving...\n")
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handleDing(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +46,7 @@ func handleDing(w http.ResponseWriter, r *http.Request) {
 
 func handlePost2Ding(w http.ResponseWriter, r *http.Request) {
 	url := "https://oapi.dingtalk.com/robot/send?access_token=a6b3039dc83a8911870274109dea4671286db8091f646aa44c7dd266bc0c579d"
-	contentType := "Content-Type: application/json"
+	contentType := "application/json"
 
 	text := make(map[string]string)
 	text["content"] = "消息: test"
@@ -55,18 +56,18 @@ func handlePost2Ding(w http.ResponseWriter, r *http.Request) {
 
 	out, err := json.Marshal(msg)
 	if err != nil {
-		fmt.Fprintf(w, "error: %s", err)
+		fmt.Fprintf(w, "error: %s\n", err)
 	} else {
 		resp, err := http.Post(url, contentType, bytes.NewReader(out))
 		if err != nil {
-			fmt.Fprintf(w, "error: %s", err)
+			fmt.Fprintf(w, "error: %s\n", err)
 		} else {
 			defer resp.Body.Close()
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Fprintf(w, "error: %s", err)
+				fmt.Fprintf(w, "error: %s\n", err)
 			} else {
-				fmt.Fprintf(w, "ok: %s", body)
+				fmt.Fprintf(w, "ok: %s\n", body)
 			}
 		}
 	}
