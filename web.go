@@ -61,7 +61,13 @@ func handlePost2Ding(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Fprintf(w, "error: %s", err)
 		} else {
-			fmt.Fprintf(w, "ok: %s", resp.Body)
+			defer resp.Body.Close()
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				fmt.Fprintf(w, "error: %s", err)
+			} else {
+				fmt.Fprintf(w, "ok: %s", body)
+			}
 		}
 	}
 }
