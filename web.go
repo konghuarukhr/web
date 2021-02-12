@@ -48,7 +48,7 @@ func handlePost2Ding(w http.ResponseWriter, r *http.Request) {
 	contentType := "Content-Type: application/json"
 
 	text := make(map[string]string)
-	text["content"] = "test"
+	text["content"] = "消息: test"
 	msg := make(map[string]interface{})
 	msg["msgtype"] = "text"
 	msg["text"] = text
@@ -57,7 +57,11 @@ func handlePost2Ding(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "error: %s", err)
 	} else {
-		http.Post(url, contentType, bytes.NewReader(out))
-		fmt.Fprintf(w, "ok: %s", string(out))
+		resp, err := http.Post(url, contentType, bytes.NewReader(out))
+		if err != nil {
+			fmt.Fprintf(w, "error: %s", err)
+		} else {
+			fmt.Fprintf(w, "ok: %s", resp.Body)
+		}
 	}
 }
