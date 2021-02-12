@@ -30,7 +30,7 @@ func loadPage(title string) (*Page, error) {
 
 func main() {
 	log.SetPrefix("goweb: ")
-	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile | log.Lmsgprefix)
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile)
 
 	http.HandleFunc("/ding", handleDing)
 	http.HandleFunc("/post2ding", handlePost2Ding)
